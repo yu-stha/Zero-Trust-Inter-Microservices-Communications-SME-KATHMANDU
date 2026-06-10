@@ -1,4 +1,4 @@
-# Zero Trust Inter-Microservices Communications — SME Kathmandu
+# Zero Trust Inter-Microservices Communications - SME Kathmandu
 
 ## Project Title
 Design, Development and Evaluation of a Zero Trust Network Policy Enforcement Framework for Microservices-Based Applications in Resource-Constrained SME Environments of Kathmandu Valley, Nepal
@@ -12,7 +12,7 @@ BSc (Hons) Cybersecurity and Ethical Hacking
 
 This repository contains the complete lab environment, configuration files, results, and documentation for a BSc Cybersecurity thesis investigating Zero Trust network policy enforcement for microservices-based applications in resource-constrained SME environments of Kathmandu Valley, Nepal.
 
-Modern Kubernetes deployments allow all services to communicate freely by default — no encryption, no verification, no access control. This creates a lateral movement vulnerability where an attacker who compromises one service can freely reach all other services. This project proves that vulnerability exists, then eliminates it using Linkerd service mesh and demonstrates the result with repeated attack simulations.
+Modern Kubernetes deployments allow all services to communicate freely by default - no encryption, no verification, no access control. This creates a lateral movement vulnerability where an attacker who compromises one service can freely reach all other services. This project proves that vulnerability exists, then eliminates it using Linkerd service mesh and demonstrates the result with repeated attack simulations.
 
 ---
 
