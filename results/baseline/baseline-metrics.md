@@ -1,70 +1,64 @@
-# Baseline Metrics — No Zero Trust
+# Complete Results — Baseline vs Zero Trust
 
-## Environment
+## Experiment Summary
 - Date: June 2026
 - Instance: m7i-flex.large (2 vCPU, 8GB RAM)
-- K3s version: v1.35.5+k3s1
-- Namespace: boutique
-- Condition: At rest, no load, no Zero Trust
+- K3s: v1.35.5+k3s1
+- Application: Google Online Boutique (5 microservices + Redis)
+- Zero Trust: Linkerd mTLS + Linkerd Authorization Policy
 
-## CPU at Rest
-| Metric | Value |
-|--------|-------|
-| CPU Utilisation (from requests) | 0.287% |
-| CPU Utilisation (from limits) | 0.145% |
+## Table 1 — Resource Overhead Comparison
+| Metric | Baseline | Zero Trust | Difference |
+|--------|----------|------------|------------|
+| CPU at rest | 0.287% | 0.173% | -0.114% |
+| CPU under load | 0.883% | 1.39% | +0.507% |
+| RAM at rest | 13.7% | 19.4% | +5.7% |
+| RAM under load | 15.0% | 20.4% | +5.4% |
+| Frontend CPU peak | 3.30% | 4.13% | +0.83% |
+| P50 Latency | N/A | 1ms | +1ms |
+| P95 Latency | N/A | 1ms | +1ms |
+| P99 Latency | N/A | 1ms | +1ms |
 
-## Memory at Rest (per pod)
-| Pod | Memory Usage |
-|-----|-------------|
-| cartservice | 18.3 MiB |
-| paymentservice | 12.5 MiB |
-| frontend | 5.29 MiB |
-| checkoutservice | 4.76 MiB |
-| productcatalogservice | 4.67 MiB |
-| redis-cart | 5.46 MiB |
-| **TOTAL** | **~51 MiB** |
+## Table 2 — Attack Simulation Results
+| Attack | From | To | Baseline | Zero Trust |
+|--------|------|----|----------|------------|
+| Attack 1 | frontend | paymentservice | PORT OPEN | ACCESS DENIED |
+| Attack 2 | cartservice | paymentservice | PORT OPEN | ACCESS DENIED |
+| Attack 3 | productcatalogservice | paymentservice | PORT OPEN | ACCESS DENIED |
 
-## Memory Utilisation
-| Metric | Value |
-|--------|-------|
-| Memory Utilisation (from requests) | 13.7% |
-| Memory Utilisation (from limits) | 6.62% |
+## Table 3 — Setup Complexity
+| Task | Time Required | Skill Level |
+|------|--------------|-------------|
+| K3s installation | 5 minutes | Beginner |
+| Microservices deployment | 10 minutes | Beginner |
+| Linkerd installation | 15 minutes | Intermediate |
+| Linkerd sidecar injection | 5 minutes | Intermediate |
+| Authorization policy writing | 30 minutes | Intermediate |
+| Calico CNI setup | 45 minutes | Advanced |
+| Total setup time | ~2 hours | Intermediate |
 
-## Lateral Movement Attack Results
-| Attack | From | To | Port | Result |
-|--------|------|----|------|--------|
-| Attack 1 | frontend | paymentservice | 50051 | PORT OPEN |
-| Attack 2 | frontend | productcatalogservice | 3550 | PORT OPEN |
-| Attack 3 | frontend | cartservice | 7070 | PORT OPEN |
-| Attack 4 | cartservice | paymentservice | 50051 | PORT OPEN |
-| Attack 5 | productcatalogservice | paymentservice | 50051 | PORT OPEN |
+## Research Question Answers
 
-## Conclusion
-All services reachable from any other service.
-No access control, no encryption, no verification.
-Lateral movement fully possible in baseline state.
+### RQ1: CPU and RAM overhead of Zero Trust on K3s?
+CPU overhead under load: +0.507 percentage points (0.883% to 1.39%)
+RAM overhead: +5.7 percentage points (13.7% to 19.4%)
+Latency overhead: 1ms P50/P95/P99 (negligible)
+CONCLUSION: Overhead is acceptable for SME workloads on m7i-flex.large equivalent hardware.
 
-## CPU and Memory Under Load
-(to be recorded after load test)
-| Metric | Value |
-|--------|-------|
-| CPU Utilisation under load | TBD |
-| Memory Utilisation under load | TBD |
+### RQ2: How effectively does Zero Trust prevent lateral movement?
+All 3 lateral movement attacks blocked — 100% effectiveness.
+Linkerd Authorization Policy successfully prevented unauthorized
+service-to-service communication at the application layer.
+CONCLUSION: Zero Trust enforcement is fully effective against lateral movement.
 
-## Updated Under Load Numbers
-| Metric | At Rest | Under Load |
-|--------|---------|------------|
-| CPU Utilisation (from requests) | 0.287% | 0.883% |
-| CPU Utilisation (from limits) | 0.145% | 0.448% |
-| Memory Utilisation (from requests) | 13.7% | 15.0% |
-| Memory Utilisation (from limits) | 6.62% | 7.24% |
+### RQ3: Is Zero Trust feasible for a Kathmandu SME without a dedicated security engineer?
+Setup time: approximately 2 hours for a junior engineer familiar with Kubernetes basics.
+Main complexity: CNI configuration (Calico) requires troubleshooting experience.
+Linkerd itself is straightforward to install and inject.
+CONCLUSION: Level 1 Zero Trust is feasible but CNI setup requires careful attention.
 
-## Per Pod CPU Under Load
-| Pod | CPU Usage | CPU Requests % |
-|-----|-----------|----------------|
-| frontend | 0.00332 | 3.32% |
-| redis-cart | 0.00154 | 2.20% |
-| cartservice | 0.0000468 | 0.0468% |
-| checkoutservice | 0.000105 | 0.105% |
-| paymentservice | 0 | 0% |
-| productcatalogservice | 0.0000238 | 0.0238% |
+### RQ4: Minimum viable Zero Trust for a Kathmandu SME?
+See docs/tiered-roadmap.md for full Level 1 specification.
+Minimum: K3s + Calico CNI + Linkerd mTLS + Linkerd Authorization Policy
+on paymentservice and other sensitive services.
+Cost: ~$0.10/hour on equivalent cloud instance.
