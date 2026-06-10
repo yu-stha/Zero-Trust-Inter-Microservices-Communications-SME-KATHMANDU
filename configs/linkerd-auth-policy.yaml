@@ -1,0 +1,35 @@
+apiVersion: policy.linkerd.io/v1beta1
+kind: Server
+metadata:
+  name: paymentservice-server
+  namespace: boutique
+spec:
+  podSelector:
+    matchLabels:
+      app: paymentservice
+  port: 50051
+  proxyProtocol: gRPC
+---
+apiVersion: policy.linkerd.io/v1alpha1
+kind: MeshTLSAuthentication
+metadata:
+  name: checkout-sa
+  namespace: boutique
+spec:
+  identities:
+  - "checkoutservice.boutique.serviceaccount.identity.linkerd.cluster.local"
+---
+apiVersion: policy.linkerd.io/v1alpha1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-checkout-to-payment
+  namespace: boutique
+spec:
+  targetRef:
+    group: policy.linkerd.io
+    kind: Server
+    name: paymentservice-server
+  requiredAuthenticationRefs:
+  - name: checkout-sa
+    kind: MeshTLSAuthentication
+    group: policy.linkerd.io
