@@ -50,3 +50,21 @@ Lateral movement fully possible in baseline state.
 |--------|-------|
 | CPU Utilisation under load | TBD |
 | Memory Utilisation under load | TBD |
+
+## Updated Under Load Numbers
+| Metric | At Rest | Under Load |
+|--------|---------|------------|
+| CPU Utilisation (from requests) | 0.287% | 0.883% |
+| CPU Utilisation (from limits) | 0.145% | 0.448% |
+| Memory Utilisation (from requests) | 13.7% | 15.0% |
+| Memory Utilisation (from limits) | 6.62% | 7.24% |
+
+## Per Pod CPU Under Load
+| Pod | CPU Usage | CPU Requests % |
+|-----|-----------|----------------|
+| frontend | 0.00332 | 3.32% |
+| redis-cart | 0.00154 | 2.20% |
+| cartservice | 0.0000468 | 0.0468% |
+| checkoutservice | 0.000105 | 0.105% |
+| paymentservice | 0 | 0% |
+| productcatalogservice | 0.0000238 | 0.0238% |
