@@ -129,6 +129,10 @@ Zero Trust enforcement via Linkerd mTLS is technically and operationally feasibl
 ---
 
 ## Author
-Yubin Shrestha
+
+
+**Yubin Shrestha**
+
 BSc (Hons) Cybersecurity and Ethical Hacking
+
 Kathmandu Valley, Nepal, 2026
