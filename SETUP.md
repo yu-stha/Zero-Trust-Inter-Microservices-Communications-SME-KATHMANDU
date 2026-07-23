@@ -13,7 +13,7 @@ Step-by-step instructions to build the Zero Trust microservices lab from a blank
 | Setting | Value |
 |---|---|
 | Instance type | m7i-flex.large (2 vCPU, 8 GB RAM) |
-| OS | Ubuntu Server 22.04 LTS |
+| OS | Ubuntu Server 26.04 LTS |
 | Storage | 30 GiB gp3 |
 | Security group | See table below |
 
