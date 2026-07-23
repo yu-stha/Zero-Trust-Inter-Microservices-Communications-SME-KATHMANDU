@@ -33,7 +33,7 @@ Modern Kubernetes deployments allow all services to communicate freely by defaul
 | CPU | 2 vCPU |
 | RAM | 8 GB |
 | Storage | 20 GB gp3 |
-| OS | Ubuntu 22.04 LTS |
+| OS | Ubuntu 26.04 LTS |
 | Kubernetes | K3s v1.35.5+k3s1 |
 | CNI | Calico v3.27.3 |
 | Service Mesh | Linkerd stable-2.x |
@@ -110,7 +110,7 @@ Any communication outside these paths = lateral movement attack path.
 
 ## How to Reproduce This Experiment
 
-1. Launch AWS EC2 m7i-flex.large with Ubuntu 22.04 LTS
+1. Launch AWS EC2 m7i-flex.large with Ubuntu 26.04 LTS
 2. Install K3s with Calico CNI
 3. Install Linkerd and inject into boutique namespace
 4. Deploy microservices: kubectl apply -f configs/boutique-deploy.yaml
